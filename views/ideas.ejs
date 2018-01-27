@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <title>Ideas</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  </head>
+    <body>
+      <a href = "./ideas/add"><h3 align="right">↪ Add  &nbsp</h3></a>
+      <center>
+          <h1>Ideas List</h1>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Overview</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%datas.reverse().forEach(idea => 
+              {%>
+              <tr>
+                <th><%=idea.id%></th>
+                <th><img src = "<%=idea.image%>"  width="500" height="350"></th>
+                <th><p><%idea.overview.split('<br>').forEach(x => {%> <%=x%> <br> <%})%></p></th>
+                <th><a href="./<%=idea.id%>" >View</a></th>
+              </tr>
+              <%})%>
+            </tbody>
+          </table>
+      </center>
+    </body>
+  </html>
