@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <title>Ideas</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  </head>
+    <body>
+      <!-- <a href = "./ideas/add"><h3 align="right">↪ Add  &nbsp</h3></a> -->
+      <center>
+          <h1>Ideas List</h1>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Overview</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%datas.reverse().forEach(idea => 
+              {%>
+              <tr>
+                <th><%=idea.id%></th>
+                <th><img src = "<%=idea.image%>"  width="500" height="350"></th>
+                <th><%-idea.overview%></th>
+                <th width = "6%">
+                  ►<a href="/ideas/view/<%=idea.id%>">View</a> <br>
+                  ►<a href="/ideas/edit/<%=idea.id%>">Edit</a> <br>
+                  ►<a href="/ideas/delete/<%=idea.id%>" onclick="return confirm('Are you sure you want to delete?');">Delete</a>
+                </th>
+              </tr>
+              <%})%>
+            </tbody>
+          </table>
+      </center>
+      <h5 align="right"><a href="/ideas/create">CREATE</a>  | <a href="/ideas">READ</a> | <a href="/ideas">UPDATE</a> | <a href="/ideas">DELETE</a></h5>
+    </body>
+  </html>

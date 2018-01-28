@@ -1,0 +1,12 @@
+<center>
+  <H1><%var arr = idea.overview.split(' ')%> <%arr = arr.slice(0,6)%> <%=arr.join(' ')%></H1>
+  <img src = "<%=idea.image%>"  width="500" height="350">
+ <p><%idea.overview.split('<br>').forEach(x => {%> <%=x%> <br> <%})%></p>
+<br>
+<br>
+<p><%-idea.option%> <br> <button>Pilih!</button> <br></p>
+<p><%-idea.option%> <br> <button>Pilih!</button> <br></p>
+<p><%-idea.option%> <br> <button>Pilih!</button> <br></p>
+<p><%-idea.option%> <br> <button>Pilih!</button> <br></p>
+<p><%-idea.option%> <br> <button>Pilih!</button> <br></p>
+</center>

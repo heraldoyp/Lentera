@@ -1,0 +1,21 @@
+<html>
+    <head>
+      <title>Register new Idea</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </head>
+      <body>
+        <a href = "/ideas"><h3 align="left">&nbsp &nbsp ⇚ Back</h3></a>
+        <center>
+            <h1>Register new Idea!</h1>
+            <form action="/ideas/create" method="post">
+              TITLE: <input type="text" placeholder="Title" name="title" disabled> <b>(not implemented yet)</b><br>
+              <b>Overview: Please input &lt;br&gt; manually</b> <br>
+              <textarea rows="6" cols="100" name="overview" placeholder= "Input overview here" wrap="hard"></textarea><br>
+              <b>Option: Please input &lt;br&gt; manually</b> <br>
+              <textarea rows="6" cols="100" name="option" placeholder= "Input overview here" wrap="hard"></textarea><br>
+              Product image URL : <input type="text" placeholder="http://imgur.com/xxxxx" name="image"><br>
+              <button>Add!</button>
+            </form>
+        </center>
+      </body>
+    </html>
