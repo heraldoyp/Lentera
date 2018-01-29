@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
 const models = require('../models');
-
 
 router.get('/', (req, res) => {
   res.send(`<center><h1>
@@ -18,14 +19,23 @@ router.get('/register', (req, res) => {
 })
 
 router.post('/register', (req, res) => {
-  let newuser = {
-    firstName : req.body.firstName,
-    lastName : req.body.lastName,
-    email : req.body.email,
-    username : req.body.username,
-    password : req.body.password
-  }
-  models.User.create(newuser).then(output => res.send(`user ${output.username} has been created`))
+  bcrypt.hash(req.body.password, 10)
+  .then((hash) => {
+    let newuser = {
+      firstName : req.body.firstName,
+      lastName : req.body.lastName,
+      email : req.body.email,
+      username : req.body.username,
+      password : hash,
+    }
+    return newuser
+  })
+    .then(newuser => models.User.create(newuser)
+      .then(output => res.send(`user ${output.username} has been created`)))
+
+  .catch(err=>{
+    res.send(err)
+  })
 })
 
 router.get('/list', (req,res) => {
@@ -52,6 +62,36 @@ router.get('/delete/:id', (req,res) => {
  })
 
 
- 
+ // Login & SignUp
+//  router.get('/signUp', (req, res)=>{
+//   res.render('signup')
+//  })
+//  router.post('/signUp', (req, res)=>{
+  
+//  })
+
+router.get('/login', (req, res)=>{
+  res.render('login')
+})
+
+router.post('/login',  (req, res)=>{
+
+    models.User.findOne({where: {username: req.body.username}})
+    .then(data =>{
+      // res.send( ddata.password);
+      bcrypt.compare(req.body.password, data.password).then(condition => {
+        // return res.send(condition);
+        if(condition){
+          res.send("login berhasil")
+        }else{
+          res.send("login gagal")
+        }
+      });
+    
+    })
+    .catch(err=>{
+      res.send(err);
+    })
+}) 
 
 module.exports = router;

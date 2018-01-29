@@ -4,8 +4,8 @@ const models = require('../models');
 
 router.get('/', (req, res) => {
   models.Idea.findAll({order : [['id', 'ASC']], include: [models.Perk]}).then(result => 
-    res.render('ideas.ejs', datas=result))
-    // res.send(result)) //Perks one-to-many relation testing
+    // res.render('ideas.ejs', datas=result))
+    res.send(result)) //Perks one-to-many relation testing
 })
 
 router.get('/view/:id', (req, res) => {
