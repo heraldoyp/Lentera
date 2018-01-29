@@ -22,8 +22,7 @@ module.exports = {
       Bluetooth & FM Receiver <br>
       10-hour Playtime`,
       image: 'https://i.imgur.com/RiDEmq4.png',
-      option: `Donate 1000k <br>
-      Get Product! `,
+      title: "Muzen OTR Wood",
       createdAt: new Date(),
       updatedAt: new Date()
     }, 
@@ -36,8 +35,7 @@ module.exports = {
       <br>
       NOTE: On mobile, click "READ THE STORY."`,
       image: 'https://i.imgur.com/X9q3pA3.jpg',
-      option: `Donate 500k <br>
-      Get Product! `,
+      title: "Duo By Simtek",
       createdAt: new Date(),
       updatedAt: new Date()
     }], {});
@@ -53,5 +51,6 @@ module.exports = {
       Example:
       return queryInterface.bulkDelete('Person', null, {});
     */
+    return queryInterface.bulkDelete('Ideas', null, {});
   }
 };

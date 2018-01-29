@@ -1,5 +1,7 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 const models = require('../models');
 
 
@@ -14,18 +16,30 @@ router.get('/', (req, res) => {
 })
 
 router.get('/register', (req, res) => {
-  res.render('createid.ejs')
+
+  if(req.session.logged !== true) res.render('createid.ejs');
+  else res.send('you are logged in already!')
+
 })
 
 router.post('/register', (req, res) => {
-  let newuser = {
-    firstName : req.body.firstName,
-    lastName : req.body.lastName,
-    email : req.body.email,
-    username : req.body.username,
-    password : req.body.password
-  }
-  models.User.create(newuser).then(output => res.send(`user ${output.username} has been created`))
+  bcrypt.hash(req.body.password, 10)
+  .then((hash) => {
+    let newuser = {
+      firstName : req.body.firstName,
+      lastName : req.body.lastName,
+      email : req.body.email,
+      username : req.body.username,
+      password : hash,
+    }
+    return newuser
+  })
+    .then(newuser => models.User.create(newuser)
+      .then(output => res.send(`user ${output.username} has been created`)))
+
+  .catch(err=>{
+    res.send(err)
+  })
 })
 
 router.get('/list', (req,res) => {
@@ -51,5 +65,51 @@ router.get('/delete/:id', (req,res) => {
   models.User.destroy({where: {id: req.params.id}}).then(deleted => res.redirect('/user/list'))
  })
 
+
+ // Login & SignUp
+//  router.get('/signUp', (req, res)=>{
+//   res.render('signup')
+//  })
+//  router.post('/signUp', (req, res)=>{
+  
+//  })
+
+router.get('/login', (req, res)=>{
+  res.render('login')
+})
+
+router.post('/login',  (req, res)=>{
+
+    models.User.findOne({where: {username: req.body.username}})
+    .then(data =>{
+      bcrypt.compare(req.body.password, data.password).then(condition => {
+        if(condition){
+          req.session.username = data.username;
+          req.session.userid = data.id;
+          req.session.logged = true;
+          res.send(`login ${data.username} berhasil`)
+        }else{
+          res.send("login gagal")
+        }
+      });
+    
+    })
+    .catch(err=>{
+      res.send(err);
+    })
+})
+
+router.get('/logout', (req,res) => {
+  req.session.username = "";
+  req.session.id = "";
+  req.session.logged = false;
+  res.send('you are logged out!')
+})
+
+router.get('/sess', (req,res) => {
+  let username = req.session.username;
+  let id = req.session.userid;
+  res.send(id + username)
+})
 
 module.exports = router;
