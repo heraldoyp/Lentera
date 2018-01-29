@@ -14,6 +14,9 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser())
+app.use(session({
+  secret: 'keyboard cat'
+}))
 
   
 // app.get('/', (req,res) => res.send(`<center><h1><a href = "/ideas"> ideas </a> <br><a href = "/user"> user </a></h1></center>`));

@@ -1,8 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var bcrypt = require('bcrypt');
+const express = require('express');
+const router = express.Router();
+const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const models = require('../models');
+
 
 router.get('/', (req, res) => {
   res.send(`<center><h1>
@@ -78,11 +79,10 @@ router.post('/login',  (req, res)=>{
 
     models.User.findOne({where: {username: req.body.username}})
     .then(data =>{
-      // res.send( ddata.password);
       bcrypt.compare(req.body.password, data.password).then(condition => {
-        // return res.send(condition);
         if(condition){
-          res.send("login berhasil")
+          req.session.username = data.username;
+          res.send(`login ${req.session.username} / ${data.username} berhasil`)
         }else{
           res.send("login gagal")
         }
@@ -92,6 +92,11 @@ router.post('/login',  (req, res)=>{
     .catch(err=>{
       res.send(err);
     })
-}) 
+})
+
+router.get('/sess', (req,res) => {
+  let username = req.session.username;
+  res.send(username)
+})
 
 module.exports = router;
