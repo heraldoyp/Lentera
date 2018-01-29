@@ -16,7 +16,10 @@ router.get('/', (req, res) => {
 })
 
 router.get('/register', (req, res) => {
-  res.render('createid.ejs')
+
+  if(req.session.logged !== true) res.render('createid.ejs');
+  else res.send('you are logged in already!')
+
 })
 
 router.post('/register', (req, res) => {
@@ -82,7 +85,9 @@ router.post('/login',  (req, res)=>{
       bcrypt.compare(req.body.password, data.password).then(condition => {
         if(condition){
           req.session.username = data.username;
-          res.send(`login ${req.session.username} / ${data.username} berhasil`)
+          req.session.userid = data.id;
+          req.session.logged = true;
+          res.send(`login ${data.username} berhasil`)
         }else{
           res.send("login gagal")
         }
@@ -94,9 +99,17 @@ router.post('/login',  (req, res)=>{
     })
 })
 
+router.get('/logout', (req,res) => {
+  req.session.username = "";
+  req.session.id = "";
+  req.session.logged = false;
+  res.send('you are logged out!')
+})
+
 router.get('/sess', (req,res) => {
   let username = req.session.username;
-  res.send(username)
+  let id = req.session.userid;
+  res.send(id + username)
 })
 
 module.exports = router;

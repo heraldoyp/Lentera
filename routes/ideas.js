@@ -26,7 +26,11 @@ router.post('/edit/:id', (req, res) => {
 })
 
 router.get('/create', (req, res) => {
+  if(req.session.logged === true){
   res.render('createideas.ejs')
+  }else{
+    res.send("Login dulu bang")
+  }
 })
 
 router.post('/create', (req, res) => {
