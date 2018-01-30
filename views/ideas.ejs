@@ -1,38 +1,38 @@
-<html>
-  <head>
-    <title>Ideas</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <link rel="stylesheet" href="https://bootswatch.com/4/sketchy/bootstrap.min.css">
-  </head>
-    <body> <%- include('includes/navbar') %>
-      <!-- <a href = "./ideas/add"><h3 align="right">↪ Add  &nbsp</h3></a> -->
-      <center>
-          <h1>Ideas List</h1>
-          <table class="table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Image</th>
-                <th>Overview</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <%datas.reverse().forEach(idea => 
-              {%>
-              <tr>
-                <th><%=idea.id%></th>
-                <th><img src = "<%=idea.image%>"  width="500" height="350"></th>
-                <th><%-idea.overview%></th>
-                <th width = "6%">
-                  ►<a href="/ideas/view/<%=idea.id%>">View</a> <br>
-                  ►<a href="/ideas/edit/<%=idea.id%>">Edit</a> <br>
-                  ►<a href="/ideas/delete/<%=idea.id%>" onclick="return confirm('Are you sure you want to delete?');">Delete</a>
-                </th>
-              </tr>
-              <%})%>
-            </tbody>
-          </table>
-      </center>
-      <h5 align="right"><a href="/ideas/create">CREATE</a>  | <a href="/ideas">READ</a> | <a href="/ideas">UPDATE</a> | <a href="/ideas">DELETE</a></h5>
-    </body>
-  </html>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div class="row">
+            <%datas.reverse().forEach(idea => {%>
+        <div class="col-sm-1">
+        </div>
+        <div class="card mb-3 col-sm-3 col-sm-offset-2">
+            <h3 class="card-header"><%=idea.title%></h3>
+            <img style="height: 200px; width: 100%; display: block;" src="<%=idea.image%>" alt="Card image">
+            <div class="card-body">
+                <h5>Progress</h5>
+            </div>
+            <div class="progress">
+                <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width:<%=idea.id*25%>%"></div>
+            </div>
+            <div class="card-body">
+                <h6 class="card-subtitle text-muted"><%-idea.overview%></h6>
+            </div>
+            <br><br>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><a href="/ideas/view/<%=idea.id%>" class="card-link">View</a></li>
+                <li class="list-group-item"><a href="/ideas/edit/<%=idea.id%>" class="card-link">Edit</a></li>
+                <li class="list-group-item"><a href="/ideas/delete/<%=idea.id%>" class="card-link" onclick="return confirm('Are you sure you want to delete?');">Delete</a></li>
+            </ul>
+            <br><br>
+        </div>   
+        <%})%> 
+    </div>
+</body>
+</html>

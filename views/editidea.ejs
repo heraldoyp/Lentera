@@ -11,11 +11,37 @@
               TITLE: <input type="text" placeholder="Title" name="title" disabled> <b>(not implemented yet)</b><br>
               <b>Overview: Please input &lt;br&gt; manually</b> <br>
               <textarea rows="6" cols="100" name="overview" placeholder= "Input overview here" wrap="hard"><%=idea.overview%></textarea><br>
-              <b>Option: Please input &lt;br&gt; manually</b> <br>
-              <textarea rows="6" cols="100" name="option" placeholder= "Input option here" wrap="hard"><%=idea.option%></textarea><br>
-              Product image URL : <input type="text" placeholder="http://imgur.com/xxxxx" name="image" value="<%=idea.image%>"><br>
+              <br><br>
               <button>Add!</button>
             </form>
+            Add more perks to preserve your promotion
+            <br>
+            <form action="/ideas/perks/<%=idea.id%>" method="get">
+              <button class="btn btn-primary">Add Perks</button>
+            </form>
+            <div class="row">
+              <table class="table table-hover" style="width: 50%">
+                  <thead>
+                    <tr class="table-dark">
+                      <th scope="col">Title</th>
+                      <th scope="col">Donated Amount</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% perks.forEach(element=> {%>
+                    <tr class="table-active">
+                      <td><%= element.title %></td>
+                      <td><%= element.amount_donated%></td>
+                      <td>
+                        <button type="button" class="btn btn-outline-success">Edit</button>
+                        <button type="button" class="btn btn-outline-danger">Delete</button>
+                      </td>
+                    </tr>
+                    <% }) %>
+                  </tbody>
+                </table>  
+            </div>
         </center>
       </body>
     </html>

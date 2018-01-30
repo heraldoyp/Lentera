@@ -4,16 +4,28 @@ const models = require('../models');
 
 router.get('/', (req, res) => {
   models.Idea.findAll({order : [['id', 'ASC']], include: [models.Perk]}).then(result => 
-    // res.render('ideas.ejs', datas=result))
-    res.send(result)) //Perks one-to-many relation testing
+    
+    res.render('ideas.ejs', datas=result))
+    // res.send(result)) //Perks one-to-many relation testing
 })
 
 router.get('/view/:id', (req, res) => {
-  models.Idea.findById(req.params.id).then(data => res.render('ideasbyid.ejs', idea = data))
+  // models.Idea.findById(req.params.id).then(data => res.render('ideasbyid.ejs', idea = data))
+  models.Idea.findById(req.params.id, {include: [models.Perk]})
+  .then(data => 
+    res.render('ideasbyid.ejs', {idea: data, perks: data.Perks})
+    // res.send(data.Perks[0].items)
+  )
+  .catch(err =>{
+    res.send(err);
+  })
 })
 
 router.get('/edit/:id', (req, res) => {
-  models.Idea.findById(req.params.id).then(data => res.render('editidea.ejs', idea = data))
+  models.Idea.findById(req.params.id, {include: [models.Perk]})
+  .then(data => res.render('editidea.ejs', {idea: data, perks: data.Perks}))
+  
+  
 })
 
 router.post('/edit/:id', (req, res) => {
@@ -22,7 +34,33 @@ router.post('/edit/:id', (req, res) => {
     image : req.body.image,
     option : req.body.option
   }
-  models.Idea.update(newdata, {where: {id: req.params.id}}).then(data => res.redirect('/ideas'))
+  models.Idea.update(newdata, {where: {id: req.params.id}})
+  .then(data => res.redirect('/ideas'))
+})
+
+//Add Perks
+router.get('/perks/:id', (req, res)=>{
+  models.Idea.findById(req.params.id, {include: [models.Perk]})
+  .then(data=>{
+    res.render('addperks.ejs', {idea: data, perks: data.Perk})
+    // res.send(data.Perks[0].items);
+  })
+})
+
+router.post('/perks/:id', (req, res)=>{
+    let newdata = {
+      title: req.body.title,
+      amount_donated: req.body.amount_donated,
+      items: req.body.items,
+      IdeaId: req.params.id
+    }
+    models.Perk.create(newdata)
+    .then(data=>{
+      res.redirect('/ideas')
+    })
+    .catch(err=>{
+      res.send(err)
+    })
 })
 
 router.get('/create', (req, res) => {
@@ -46,6 +84,9 @@ router.post('/create', (req, res) => {
 router.get('/delete/:id', (req, res) => {
   models.Idea.destroy({where: {id: req.params.id}}).then(deleted => res.redirect('/ideas'))
 })
+
+
+
 
 
 module.exports = router;
