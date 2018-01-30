@@ -16,6 +16,8 @@ router.get('/', (req, res) => {
   `)
 })
 
+//CREATE 
+
 router.get('/register', (req, res) => {
 
   if(req.session.logged !== true) res.render('createid.ejs');
@@ -39,12 +41,16 @@ router.post('/register',encryptpass, (req, res) => {
 
 })
 
+//READ
+
 router.get('/list', (req,res) => {
 
   models.User.findAll({order : [['id', 'ASC']]})
   .then(output => res.render('userlist.ejs', input = output))
 
 })
+
+//UPDATE
 
 router.get('/edit/:id', (req,res) => {
 
@@ -68,6 +74,8 @@ router.post('/edit/:id',encryptpass, (req,res) => {
 
 })
 
+//DELETE
+
 router.get('/delete/:id', (req,res) => {
 
   models.User.destroy({where: {id: req.params.id}})
@@ -75,7 +83,7 @@ router.get('/delete/:id', (req,res) => {
 
  })
 
-
+// LOGINS and LOGOUT
 router.get('/login', (req, res)=>{
   res.render('login')
 })
@@ -105,6 +113,8 @@ router.get('/logout', (req,res) => {
   res.send('you are logged out!')
 
 })
+
+// SESSION CHECK
 
 router.get('/sess', (req,res) => {
   let username = req.session.username;
