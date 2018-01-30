@@ -1,21 +1,61 @@
 <html>
     <head>
       <title>Register new Idea</title>
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://bootswatch.com/4/sketchy/bootstrap.min.css">
     </head>
       <body>
-        <a href = "/ideas"><h3 align="left">&nbsp &nbsp ⇚ Back</h3></a>
+          <%- include('includes/navbar') %>
         <center>
-            <h1>Register new Idea!</h1>
+          <div class = "container" style="width: 50%">
+            <h1><br>Register new Idea!</h1>
             <form action="/ideas/create" method="post">
-              TITLE: <input type="text" placeholder="Title" name="title" disabled> <b>(not implemented yet)</b><br>
-              <b>Overview: Please input &lt;br&gt; manually</b> <br>
-              <textarea rows="6" cols="100" name="overview" placeholder= "Input overview here" wrap="hard"></textarea><br>
-              <b>Option: Please input &lt;br&gt; manually</b> <br>
-              <textarea rows="6" cols="100" name="option" placeholder= "Input overview here" wrap="hard"></textarea><br>
+              <fieldset>
+              <b style="font-size:20px">TITLE:</b>
+              <input type="text" class="form-control" placeholder="Title" name="title"><br>
+              
+              <b style="font-size:20px">OVERVIEW</b>
+              <textarea rows="6" cols="100" name="overview" class="form-control" placeholder= "Input overview here" wrap="hard"></textarea>
+              <small align="right" id="email tnc" class="form-text text-muted"><b>Please input &lt;br&gt; manually!!!</b></small>
+              
+              <b style="font-size:20px">OPTIONS</b>
+              <textarea rows="6" cols="100" name="option" class="form-control" placeholder= "Input overview here" wrap="hard"></textarea>
+              <small align="right" id="email tnc" class="form-text text-muted"><b>Please input &lt;br&gt; manually!!!</b></small>
+              
               Product image URL : <input type="text" placeholder="http://imgur.com/xxxxx" name="image"><br>
-              <button>Add!</button>
+              <small align="right" id="email tnc" class="form-text text-muted"><br></small>
+              <p align ="right"><button type="submit" class="btn btn-primary">Submit</button></p>
+            </fieldset>
             </form>
+          </div>
         </center>
       </body>
-    </html>
+</html>
+
+<!-- 
+    <form action="/user/register" method="post">
+      <div class = "container" style="width: 33%">
+          <fieldset>
+            <label for="firstName">First Name</label>
+              <input type="text" class="form-control" placeholder="Masukkan nama depan!" name="firstName">
+              <small><br></small>
+
+            <label for="lastName">Last Name</label>
+              <input type="text" class="form-control" placeholder="Masukkan nama belakang!" name="lastName">
+              <small><br></small>
+            
+            <label for="email">Email address</label> 
+              <input type="email" class="form-control" placeholder="Masukkan email!" name="email">
+              <small align="right" id="email tnc" class="form-text text-muted">Kita tidak akan mengeshare email mu dengan siapapun!</small>
+              
+            <label for="username">Username</label>
+              <input type="text" class="form-control" placeholder="Masukkan username!" name="username">
+              <small><br></small>
+              
+            <label for="password">Password</label>
+              <input type="password" class="form-control" placeholder="Masukkan password!" name="password">
+              <small><br></small>
+            
+            <p align ="right"><button type="submit" class="btn btn-primary">Submit</button></p>
+          </fieldset>
+        </div>
+      </form>   -->
