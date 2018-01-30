@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
+const encryptpass = require('../helpers/encrypt-help')
+const passcheck = require('../helpers/passcheck')
 const models = require('../models');
 
 
 router.get('/', (req, res) => {
-  res.send(`<center><h1>
+  res.send(`
+  <center><h1>
   <ul>Create =<a href="/user/register"> Register</a><br></ul>
   <ul>Read (all) =<a href="/user/list">list</a><br></ul>
   <ul>Update = <a href="/user/list"> Edit (embed on list)</a><br></ul>
@@ -22,35 +23,38 @@ router.get('/register', (req, res) => {
 
 })
 
-router.post('/register', (req, res) => {
-  bcrypt.hash(req.body.password, 10)
-  .then((hash) => {
-    let newuser = {
-      firstName : req.body.firstName,
-      lastName : req.body.lastName,
-      email : req.body.email,
-      username : req.body.username,
-      password : hash,
-    }
-    return newuser
-  })
-    .then(newuser => models.User.create(newuser)
-      .then(output => res.send(`user ${output.username} has been created`)))
+router.post('/register',encryptpass, (req, res) => {
+  
+  let newuser = {
+    firstName : req.body.firstName,
+    lastName : req.body.lastName,
+    email : req.body.email,
+    username : req.body.username,
+    password : req.body.password
+  }
 
-  .catch(err=>{
-    res.send(err)
-  })
+  models.User.create(newuser)
+  .then(output => res.send(`user ${output.username} has been created`))
+  .catch(err => res.send(err))
+
 })
 
 router.get('/list', (req,res) => {
-  models.User.findAll({order : [['id', 'ASC']]}).then(output => res.render('userlist.ejs', input = output))
+
+  models.User.findAll({order : [['id', 'ASC']]})
+  .then(output => res.render('userlist.ejs', input = output))
+
 })
 
 router.get('/edit/:id', (req,res) => {
-  models.User.findById(req.params.id).then(output => res.render('useredit.ejs', user = output))
+
+  models.User.findById(req.params.id)
+  .then(output => res.render('useredit.ejs', user = output))
+
 })
 
-router.post('/edit/:id', (req,res) => {
+router.post('/edit/:id',encryptpass, (req,res) => {
+
   let newdata = {
     firstName : req.body.firstName,
     lastName : req.body.lastName,
@@ -58,52 +62,48 @@ router.post('/edit/:id', (req,res) => {
     username : req.body.username,
     password : req.body.password
   }
-  models.User.update(newdata, {where : {id :req.params.id}}).then(output => res.redirect('/user/list'))
+
+  models.User.update(newdata, {where : {id :req.params.id}})
+  .then(output => res.redirect('/user/list'))
+
 })
 
 router.get('/delete/:id', (req,res) => {
-  models.User.destroy({where: {id: req.params.id}}).then(deleted => res.redirect('/user/list'))
+
+  models.User.destroy({where: {id: req.params.id}})
+  .then(deleted => res.redirect('/user/list'))
+
  })
 
-
- // Login & SignUp
-//  router.get('/signUp', (req, res)=>{
-//   res.render('signup')
-//  })
-//  router.post('/signUp', (req, res)=>{
-  
-//  })
 
 router.get('/login', (req, res)=>{
   res.render('login')
 })
 
-router.post('/login',  (req, res)=>{
+router.post('/login', passcheck, (req, res)=>{
 
-    models.User.findOne({where: {username: req.body.username}})
-    .then(data =>{
-      bcrypt.compare(req.body.password, data.password).then(condition => {
-        if(condition){
-          req.session.username = data.username;
-          req.session.userid = data.id;
-          req.session.logged = true;
-          res.send(`login ${data.username} berhasil`)
-        }else{
-          res.send("login gagal")
-        }
-      });
-    
-    })
-    .catch(err=>{
-      res.send(err);
-    })
+  if (req.body.login) {
+
+    req.session.username = req.body.username;
+    req.session.userid = req.body.id;
+    req.session.logged = true;
+
+    res.send(`login ${req.session.username} <br> user id:${req.session.userid} berhasil`)
+  
+  } else {
+    res.send("login gagal")
+  }
+
 })
 
 router.get('/logout', (req,res) => {
-  req.session.username = "";
-  req.session.id = "";
+  
+  req.session.username = null;
+  req.session.userid = null;
   req.session.logged = false;
+  
   res.send('you are logged out!')
+
 })
 
 router.get('/sess', (req,res) => {
