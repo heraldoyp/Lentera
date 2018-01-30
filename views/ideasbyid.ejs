@@ -1,12 +1,47 @@
-<center>
-  <H1><%var arr = idea.overview.split(' ')%> <%arr = arr.slice(0,6)%> <%=arr.join(' ')%></H1>
-  <img src = "<%=idea.image%>"  width="500" height="350">
- <p><%idea.overview.split('<br>').forEach(x => {%> <%=x%> <br> <%})%></p>
-<br>
-<br>
-<p><%-idea.option%> <br> <button>Pilih!</button> <br></p>
-<p><%-idea.option%> <br> <button>Pilih!</button> <br></p>
-<p><%-idea.option%> <br> <button>Pilih!</button> <br></p>
-<p><%-idea.option%> <br> <button>Pilih!</button> <br></p>
-<p><%-idea.option%> <br> <button>Pilih!</button> <br></p>
-</center>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://bootswatch.com/4/slate/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <%- include('includes/navbar') %>
+    <br>
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-6">
+            <div class="card mb-3">
+                <h3 class="card-header text-primary"><%var arr = idea.overview.split(' ')%> <%arr = arr.slice(0,6)%> <%=arr.join(' ')%></h3>
+                <img class="img-center" style="height: 500px; width: 100%; display: block;" src="<%= idea.image %>" alt="Card image">
+                <div class="card-body">
+                  <h6 class="card-subtitle"><%idea.overview.split('<br>').forEach(x => {%><%=x%> <br> <%})%></h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3">
+            <% perks.forEach(element=> {%>
+            <div class="row" style="width: 100%">
+              <div class="col">
+                  <div class="card mb-2">
+                      <h3 class="card-header text-primary" ><%= element.title %></h3>
+                      <div class="card-body">
+                        <h5 class="card-title">Donated Amount: <%= element.amount_donated %></h5>
+                        <h6 class="card-subtitle"><%- element.items %></h6>
+                      </div>
+                      <div class="card-body">
+                              <button type="button" class="btn btn-danger">Get This Perks</button>
+                      </div>
+                  </div>   
+              </div>
+           </div> 
+            <% }) %>       
+        </div>
+        
+    </div>
+    
+</body>
+</html>

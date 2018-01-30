@@ -112,4 +112,9 @@ router.get('/sess', (req,res) => {
   res.send(id + username)
 })
 
+
+//Test Footer 
+router.get('/footer', (req, res)=>{
+  res.render('footer');
+})
 module.exports = router;
