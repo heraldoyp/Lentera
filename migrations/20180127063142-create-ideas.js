@@ -17,6 +17,12 @@ module.exports = {
       title:{
         type: Sequelize.STRING
       },
+      total_funding:{
+        type: Sequelize.INTEGER
+      },
+      goal_funding: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

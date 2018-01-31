@@ -23,6 +23,8 @@ module.exports = {
       10-hour Playtime`,
       image: 'https://i.imgur.com/RiDEmq4.png',
       title: "Muzen OTR Wood",
+      total_funding: 0,
+      goal_funding: 5000000,
       createdAt: new Date(),
       updatedAt: new Date()
     }, 
@@ -36,6 +38,8 @@ module.exports = {
       NOTE: On mobile, click "READ THE STORY."`,
       image: 'https://i.imgur.com/X9q3pA3.jpg',
       title: "Duo By Simtek",
+      total_funding: 0,
+      goal_funding: 2000000,
       createdAt: new Date(),
       updatedAt: new Date()
     }], {});

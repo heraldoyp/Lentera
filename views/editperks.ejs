@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head></head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script> 
+    <script type="text/javascript"> bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });</script>
+</head>
+<body>
+    <table border="1">
+        <tr>
+            <td>Title</td>
+            <td>Donation</td>
+            <td>Items</td>
+        </tr>
+        <tr>
+            <td><%=perk.title%></td>
+            <td><%=perk.amount_donated%></td>
+            <td><%-perk.items%></td>
+        </tr>
+    </table>
+    <form action="/ideas/perks/<%=perk.id%>/edit" method="POST">
+        <input type="text" name="title" value="<%=perk.title%>">
+        <input type="text" name="amount_donated" value="<%=perk.amount_donated%>">
+        <input type="text" name="items" value="<%=perk.items%>">
+        <input type="integer" name="IdeaId" value="<%=perk.IdeaId%>" disabled>
+        <input type="submit" value="Edit Data">
+    </form>
+</body>
+</html>
