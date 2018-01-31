@@ -6,14 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script> 
+      <script type="text/javascript"> bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });</script>
 </head>
 <body>
-    <form action="/ideas/perks/<%=idea.id%>" method="POST">
-        <input type="text" name="title"><br>
-        <input type="text" name="amount_donated"><br>
-        <b>Overview: Please input &lt;li&gt; and &lt;/li&gt; manually</b> <br>
-        <textarea rows="6" cols="100" name="items" placeholder= "Input overview here" wrap="hard"></textarea><br>
-        <input type="submit" value="Submit">
-    </form>
+    <%- include('includes/navbar')%>
+    <br><br>
+    <h1 class="text-center">Input new <%=idea.title%> Perks</h1>
+    <center>
+        <form action="/ideas/perks/<%=idea.id%>" method="POST">
+            <div class="col-sm-6">
+                <label for="exampleInputEmail1">Input Title</label>
+                <input type="text" name="title" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Title">
+            </div>
+            <div class="col-sm-6">
+                <label for="exampleInputEmail1">Input Donation</label>
+                <input type="text" name="amount_donated" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Donation">
+            </div>
+            <b>Overview: Please input &lt;li&gt; and &lt;/li&gt; manually</b> <br>
+            <textarea rows="6" cols="100" name="items" placeholder= "Input overview here" wrap="hard"></textarea><br>
+            <input type="submit" value="Submit">
+        </form>
+    </center>   
 </body>
 </html>

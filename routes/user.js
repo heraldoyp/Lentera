@@ -85,7 +85,7 @@ router.get('/delete/:id', (req,res) => {
 
 // LOGINS and LOGOUT
 router.get('/login', (req, res)=>{
-  res.render('login')
+  res.render('loginNew')
 })
 
 router.post('/login', passcheck, (req, res)=>{
@@ -123,8 +123,4 @@ router.get('/sess', (req,res) => {
 })
 
 
-//Test Footer 
-router.get('/footer', (req, res)=>{
-  res.render('footer');
-})
 module.exports = router;

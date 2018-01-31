@@ -3,7 +3,9 @@ module.exports = (sequelize, DataTypes) => {
   var Idea = sequelize.define('Idea', {
     overview: DataTypes.STRING,
     image: DataTypes.STRING,
-    title: DataTypes.STRING
+    title: DataTypes.STRING,
+    total_funding: DataTypes.INTEGER,
+    goal_funding: DataTypes.INTEGER
   });
 
   Idea.associate = function(models){

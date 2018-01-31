@@ -9,6 +9,7 @@ var cookieParser = require('cookie-parser')
 //Model
 const ideas = require('./routes/ideas.js')
 const user = require('./routes/user.js')
+const home = require('./routes/home.js')
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -20,6 +21,7 @@ app.use(session({
 
   
 // app.get('/', (req,res) => res.send(`<center><h1><a href = "/ideas"> ideas </a> <br><a href = "/user"> user </a></h1></center>`));
+app.use('/', home);
 app.use('/ideas', ideas);
 app.use('/user', user);
 
