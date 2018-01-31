@@ -20,12 +20,12 @@ router.get('/', (req, res) => {
 
 router.get('/register', (req, res) => {
 
-  if(req.session.logged !== true) res.render('createid.ejs');
+  if(req.session.logged !== true || req.session.username === 'admin') res.render('createid.ejs');
   else res.send('you are logged in already!')
 
 })
 
-router.post('/register',encryptpass, (req, res) => {
+router.post('/register', encryptpass , (req, res) => {
   
   let newuser = {
     firstName : req.body.firstName,
@@ -45,47 +45,66 @@ router.post('/register',encryptpass, (req, res) => {
 
 router.get('/list', (req,res) => {
 
-  models.User.findAll({order : [['id', 'ASC']]})
-  .then(output => res.render('userlist.ejs', input = output))
+  if (req.session.username === "admin") {
+    models.User.findAll({order : [['id', 'ASC']]})
+    .then(output => res.render('userlist.ejs', input = output))
+  } else {
+    res.send('Page ini hanya bisa diakses oleh admin!')
+  }
 
 })
 
 //UPDATE
 
 router.get('/edit/:id', (req,res) => {
-
-  models.User.findById(req.params.id)
-  .then(output => res.render('useredit.ejs', user = output))
+  console.log(req.session.userid)
+  console.log(req.params.id)
+  if (req.session.username === "admin" || req.session.userid == req.params.id) {
+    models.User.findById(req.params.id)
+    .then(output => res.render('useredit.ejs', user = output))
+  } else {
+    res.send('Page ini hanya bisa diakses oleh admin! / yang memiliki id!')
+  }
 
 })
 
 router.post('/edit/:id',encryptpass, (req,res) => {
 
-  let newdata = {
-    firstName : req.body.firstName,
-    lastName : req.body.lastName,
-    email : req.body.email,
-    username : req.body.username,
-    password : req.body.password
+  if (req.session.username === "admin" || req.session.userid === req.params.id) {
+    let newdata = {
+      firstName : req.body.firstName,
+      lastName : req.body.lastName,
+      email : req.body.email,
+      username : req.body.username,
+      password : req.body.password
+    }
+    models.User.update(newdata, {where : {id :req.params.id}})
+    .then(output => res.redirect('/user/list'))
+  } else {
+    res.send('Page ini hanya bisa diakses oleh admin! / user!')
   }
-
-  models.User.update(newdata, {where : {id :req.params.id}})
-  .then(output => res.redirect('/user/list'))
-
 })
 
 //DELETE
 
 router.get('/delete/:id', (req,res) => {
 
-  models.User.destroy({where: {id: req.params.id}})
-  .then(deleted => res.redirect('/user/list'))
+  if (req.session.username === "admin"){
+    models.User.destroy({where: {id: req.params.id}})
+    .then(deleted => res.redirect('/user/list'))
+  } else {
+    res.send('Page ini hanya bisa diakses oleh admin!')
+  }
 
  })
 
 // LOGINS and LOGOUT
 router.get('/login', (req, res)=>{
-  res.render('loginNew')
+  if(req.session.logged) {
+    res.send('Kamu sudah login')
+  } else {
+    res.render('login')
+  }
 })
 
 router.post('/login', passcheck, (req, res)=>{
@@ -121,6 +140,5 @@ router.get('/sess', (req,res) => {
   let id = req.session.userid;
   res.send(id + username)
 })
-
 
 module.exports = router;
