@@ -25,7 +25,7 @@ router.get('/register', (req, res) => {
 
 })
 
-router.post('/register',encryptpass, (req, res) => {
+router.post('/register', (req, res) => {
   
   let newuser = {
     firstName : req.body.firstName,
@@ -59,13 +59,11 @@ router.get('/edit/:id', (req,res) => {
 
 })
 
-router.post('/edit/:id',encryptpass, (req,res) => {
+router.post('/edit/:id', (req,res) => {
 
   let newdata = {
     firstName : req.body.firstName,
     lastName : req.body.lastName,
-    email : req.body.email,
-    username : req.body.username,
     password : req.body.password
   }
 
@@ -85,7 +83,7 @@ router.get('/delete/:id', (req,res) => {
 
 // LOGINS and LOGOUT
 router.get('/login', (req, res)=>{
-  res.render('loginNew')
+  res.render('login')
 })
 
 router.post('/login', passcheck, (req, res)=>{
@@ -121,6 +119,7 @@ router.get('/sess', (req,res) => {
   let id = req.session.userid;
   res.send(id + username)
 })
+
 
 
 module.exports = router;

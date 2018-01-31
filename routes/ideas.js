@@ -5,13 +5,9 @@ const progress = require('../helpers/progress.js')
 
 router.get('/', (req, res) => {
   models.Idea.findAll({order : [['id', 'ASC']], include: [models.Perk]}).then(results => {
-      let databaru = progress(results)
-      // console.log(databaru[0])
-      // res.send(databaru)
-      res.render('ideas.ejs', {datas: databaru})
-
-  })
-    // res.send(result)) //Perks one-to-many relation testing
+      // let databaru = progress(results)
+      res.render('ideas.ejs', {datas: results})
+  }) 
 })
 
 router.get('/view/:id', (req, res) => {
@@ -135,6 +131,44 @@ router.get('/perks/:id/delete', (req, res)=>{
   })
 })
 
+//helper generate invoices
+//req.session.userId
+router.get('/view/:idIdea/:idPerk/approve', (req, res)=>{
+  // console.log(models.UserIdea.invoice)
+    models.Idea.findOne({include: [models.Perk], where: {id: req.params.idIdea}})
+    .then(dataIdea=>{
+      models.Perk.findOne({where: {id: req.params.idPerk}})
+      .then(dataPerk=>{
+        models.User.findOne({where: {id: req.session.userid}})
+        .then(dataUser=>{
+          res.render('approve', {idea: dataIdea, perk: dataPerk, user: dataUser})
+        })
+      })
+    })
+    .catch(err => res.send(err));
+})
 
+router.post('/view/:idIdea/:idPerk/approve', (req, res)=>{
+  let obj = {
+    UserId: req.session.userid,
+    IdeaId: req.params.idIdea,
+    invoice: req.body.donation
+  }
+  
+  models.UserIdea.create(obj)
+  .then(datas=>{
+    res.redirect('/ideas')
+  })
+  .catch(err=>{
+    res.send(err)
+  })
+})
+
+
+router.get('/cek', (req, res) => {
+  models.Idea.findAll({include: [models.User]})
+  .then(data => res.send(data))
+  
+})
 
 module.exports = router;

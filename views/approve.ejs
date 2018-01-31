@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://bootswatch.com/4/sketchy/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <%- include('includes/navbar')%>
+    <br><br>
+    <div class="row">
+        <div class="offset-2">
+            <div class="card mb-3 col-sm-9">
+                    <h3 class="card-header"><%=idea.title%></h3>
+                <div class="row">
+                    <div class="card-body col-sm-6">
+                        <h6 class="card-subtitle text-muted" style="font-size: 25px"><%-idea.overview%></h6>
+                    </div>
+                    <div class="card bg-light mb-3 col-sm-6" style="max-width: 20rem; font-size: 20px;">
+                        <div class="card-header"><%=perk.title%></div>
+                        <div class="card-body">
+                            <h4 class="card-title">Donation = IDR<%=perk.amount_donated%></h4>
+                            <p class="card-text"><%-perk.items%></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+    <div class="row">
+        <div class="col-sm-10 offset-1">
+            <div class="card border-primary mb-3 col-sm-12" >
+                <div class="card-header">To : <%=user.firstName%> <%=user.lastName%></div>
+                <div class="card-body text-primary">
+                    <h4 class="card-title">Confirmation</h4>
+                    <p class="card-text">Apakah anda setuju untuk melakukan Dukungan sebesar IDR<%=perk.amount_donated%>, dengan keuntungan diatas? </p>
+                </div>
+                <form action="/ideas/view/<%=idea.id%>/<%=perk.id%>/approve" method="post">
+                    <input type="hidden" name="donation" value="<%=perk.amount_donated%>">
+                    <button type="submit" class="btn btn-success">Confirm</button>
+                </form>
+                
+                <br>
+            </div>
+        </div>
+    </div>
+    
+    <br><br><br>
+</body>
+</html>
