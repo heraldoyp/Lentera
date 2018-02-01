@@ -6,13 +6,13 @@ const login = require('../helpers/haruslogin.js')
 const access = require('../helpers/access.js')
 
 
-router.get('/', (req, res) => {
+router.get('/', login, (req, res) => {
   models.Idea.findAll({order : [['id', 'ASC']], include: [models.Perk]}).then(results => {
       res.render('ideas.ejs', {datas: results})
   }) 
 })
 
-router.get('/view/:id', (req, res) => {
+router.get('/view/:id', login, (req, res) => {
   models.Idea.findById(req.params.id, {include: [models.Perk]})
   .then(data => 
     res.render('ideasbyid.ejs', {idea: data, perks: data.Perks}))
@@ -26,7 +26,7 @@ router.get('/edit/:id', access, (req, res) => {
   .then(data => res.render('editidea.ejs', {idea: data, perks: data.Perks}))  
 })
 
-router.post('/edit/:id', admin, (req, res) => {
+router.post('/edit/:id', access, (req, res) => {
   let newdata = {
     overview : req.body.overview,
     image : req.body.image,
@@ -54,20 +54,20 @@ router.post('/create', login, (req, res) => {
 })
 
 
-router.get('/delete/:id', admin, (req, res) => {
+router.get('/delete/:id', login, (req, res) => {
   models.Idea.destroy({where: {id: req.params.id}}).then(deleted => res.redirect('/ideas'))
 })
 
 
 //Add Perks
-router.get('/perks/:id', (req, res)=>{
+router.get('/perks/:id', login, (req, res)=>{
   models.Idea.findById(req.params.id, {include: [models.Perk]})
   .then(data=>{
     res.render('addperks.ejs', {idea: data, perks: data.Perk})
   })
 })
 
-router.post('/perks/:id', (req, res)=>{
+router.post('/perks/:id', login, (req, res)=>{
     let newdata = {
       title: req.body.title,
       amount_donated: req.body.amount_donated,
@@ -123,10 +123,8 @@ router.get('/perks/:id/delete', admin, (req, res)=>{
   })
 })
 
-//helper generate invoices
-//req.session.userId
+
 router.get('/view/:idIdea/:idPerk/approve', login, (req, res)=>{
-  // console.log(models.UserIdea.invoice)
     models.Idea.findOne({include: [models.Perk], where: {id: req.params.idIdea}})
     .then(dataIdea=>{
       models.Perk.findOne({where: {id: req.params.idPerk}})
@@ -156,7 +154,7 @@ router.post('/view/:idIdea/:idPerk/approve', login, (req, res)=>{
 })
 
 
-router.get('/cek', (req, res) => {
+router.get('/cek', login, (req, res) => {
   models.Idea.findAll({include: [models.User]})
   .then(data => res.send(data))
   
