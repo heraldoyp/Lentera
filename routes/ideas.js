@@ -1,35 +1,32 @@
 const express = require('express');
 const router = express.Router();
 const models = require('../models');
-const progress = require('../helpers/progress.js')
+const admin = require('../helpers/adminaccess.js')
+const login = require('../helpers/haruslogin.js')
+const access = require('../helpers/access.js')
+
 
 router.get('/', (req, res) => {
   models.Idea.findAll({order : [['id', 'ASC']], include: [models.Perk]}).then(results => {
-      // let databaru = progress(results)
       res.render('ideas.ejs', {datas: results})
   }) 
 })
 
 router.get('/view/:id', (req, res) => {
-  // models.Idea.findById(req.params.id).then(data => res.render('ideasbyid.ejs', idea = data))
   models.Idea.findById(req.params.id, {include: [models.Perk]})
   .then(data => 
-    res.render('ideasbyid.ejs', {idea: data, perks: data.Perks})
-    // res.send(data.Perks[0].items)
-  )
+    res.render('ideasbyid.ejs', {idea: data, perks: data.Perks}))
   .catch(err =>{
-    res.send(err);
-  })
+    res.send(err);})
 })
 
-router.get('/edit/:id', (req, res) => {
+
+router.get('/edit/:id', access, (req, res) => {
   models.Idea.findById(req.params.id, {include: [models.Perk]})
-  .then(data => res.render('editidea.ejs', {idea: data, perks: data.Perks}))
-  
-  
+  .then(data => res.render('editidea.ejs', {idea: data, perks: data.Perks}))  
 })
 
-router.post('/edit/:id', (req, res) => {
+router.post('/edit/:id', admin, (req, res) => {
   let newdata = {
     overview : req.body.overview,
     image : req.body.image,
@@ -41,15 +38,11 @@ router.post('/edit/:id', (req, res) => {
   .then(data => res.redirect('/ideas'))
 })
 
-router.get('/create', (req, res) => {
-  if(req.session.logged === true){
+router.get('/create', login, (req, res) => {
   res.render('createideas.ejs')
-  }else{
-    res.send("Login dulu bang")
-  }
 })
 
-router.post('/create', (req, res) => {
+router.post('/create', login, (req, res) => {
   let newidea = {
     overview : req.body.overview,
     image : req.body.image,
@@ -61,7 +54,7 @@ router.post('/create', (req, res) => {
 })
 
 
-router.get('/delete/:id', (req, res) => {
+router.get('/delete/:id', admin, (req, res) => {
   models.Idea.destroy({where: {id: req.params.id}}).then(deleted => res.redirect('/ideas'))
 })
 
@@ -71,7 +64,6 @@ router.get('/perks/:id', (req, res)=>{
   models.Idea.findById(req.params.id, {include: [models.Perk]})
   .then(data=>{
     res.render('addperks.ejs', {idea: data, perks: data.Perk})
-    // res.send(data.Perks[0].items);
   })
 })
 
@@ -92,7 +84,7 @@ router.post('/perks/:id', (req, res)=>{
 })
 
 
-router.get('/perks/:id/edit', (req, res)=>{
+router.get('/perks/:id/edit', admin, (req, res)=>{
   // res.send(req.params.id)
   models.Perk.findById(req.params.id)
   .then(data=>{
@@ -104,7 +96,7 @@ router.get('/perks/:id/edit', (req, res)=>{
   
 })
 
-router.post('/perks/:id/edit', (req, res)=>{
+router.post('/perks/:id/edit', admin, (req, res)=>{
   let changedData = {
     title: req.body.title,
     amount_donated: req.body.amount_donated,
@@ -121,7 +113,7 @@ router.post('/perks/:id/edit', (req, res)=>{
   })
 })
 
-router.get('/perks/:id/delete', (req, res)=>{
+router.get('/perks/:id/delete', admin, (req, res)=>{
   models.Perk.destroy({where: {id: req.params.id}})
   .then(data=>{
     res.send("data telah dihapus")
@@ -133,7 +125,7 @@ router.get('/perks/:id/delete', (req, res)=>{
 
 //helper generate invoices
 //req.session.userId
-router.get('/view/:idIdea/:idPerk/approve', (req, res)=>{
+router.get('/view/:idIdea/:idPerk/approve', login, (req, res)=>{
   // console.log(models.UserIdea.invoice)
     models.Idea.findOne({include: [models.Perk], where: {id: req.params.idIdea}})
     .then(dataIdea=>{
@@ -148,13 +140,12 @@ router.get('/view/:idIdea/:idPerk/approve', (req, res)=>{
     .catch(err => res.send(err));
 })
 
-router.post('/view/:idIdea/:idPerk/approve', (req, res)=>{
+router.post('/view/:idIdea/:idPerk/approve', login, (req, res)=>{
   let obj = {
     UserId: req.session.userid,
     IdeaId: req.params.idIdea,
     invoice: req.body.donation
   }
-  
   models.UserIdea.create(obj)
   .then(datas=>{
     res.redirect('/ideas')
