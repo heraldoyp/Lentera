@@ -33,7 +33,9 @@
                         <h6 class="card-subtitle"><%- element.items %></h6>
                       </div>
                       <div class="card-body">
-                              <button type="button" class="btn btn-danger">Get This Perks</button>
+                        <form action="/ideas/view/<%=idea.id%>/<%=element.id%>/approve" method="get">
+                            <button class="btn btn-danger">Get This Perks</button>  
+                        </form>        
                       </div>
                   </div>   
               </div>

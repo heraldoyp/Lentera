@@ -10,8 +10,8 @@
             <form action="/user/edit/<%=user.id%>" method="post">
                 <input type="text" placeholder="First Name" name="firstName" value='<%=user.firstName%>'maxlength="15"><br>
                 <input type="text" placeholder="Last Name" name="lastName"  value='<%=user.lastName%>'maxlength="15"><br>
-                <input type="email" placeholder="Email" name="email"  value='<%=user.email%>'><br>
-                <input type="text" placeholder="Username" name="username"  value='<%=user.username%>'maxlength="15"><br>
+                <input type="email" placeholder="Email" value='<%=user.email%>' disabled><br>
+                <input type="text" placeholder="Username" value='<%=user.username%>'maxlength="15" disabled><br>
                 <input type="password" placeholder="password" name="password"  value='<%=user.password%>'maxlength="15"><br>
                 <br>
               <button>Edit Details!!</button>
