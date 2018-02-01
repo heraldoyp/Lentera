@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const models = require('../models');
 const progress = require('../helpers/progress.js')
+var api_key = 'key-7f663c7fad5ee49dd36fa41cd5714894';
+var domain = 'sandboxddff3e8a92d349d1bf5e32d78e253677.mailgun.org';
+var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
+
+
+
 
 router.get('/', (req, res) => {
   models.Idea.findAll({order : [['id', 'ASC']], include: [models.Perk]}).then(results => {
@@ -157,7 +163,22 @@ router.post('/view/:idIdea/:idPerk/approve', (req, res)=>{
   
   models.UserIdea.create(obj)
   .then(datas=>{
-    res.redirect('/ideas')
+    var data = {
+      from: 'Lentera <lentera@mail.com>',
+      to: 'heraldoyusrontris@gmail.com',
+      subject: 'Hello',
+      text: 'Testing some Mailgun awesomeness!'
+    };
+     
+    mailgun.messages().send(data, function (error, body) {
+      if(!error){
+        console.log(data)
+        console.log(body)
+        console.log("success")
+      }else{
+        console.log("email not sent")
+      }
+    });
   })
   .catch(err=>{
     res.send(err)
