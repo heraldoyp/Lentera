@@ -23,6 +23,7 @@
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
+    "express-flash": "0.0.2",
     "express-session": "^1.15.6",
     "mysql2": "^1.5.1",
     "pg": "^6.4.2",
