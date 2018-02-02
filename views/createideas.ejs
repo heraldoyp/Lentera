@@ -18,11 +18,11 @@
               <b style="font-size:20px">OVERVIEW</b>
               <textarea rows="6" cols="100" name="overview" class="form-control" placeholder= "Input overview here" wrap="hard"></textarea>
               <small align="right" id="email tnc" class="form-text text-muted"><b>Please input &lt;br&gt; manually!!!</b></small>
-              
-              <b style="font-size:20px">OPTIONS</b>
-              <textarea rows="6" cols="100" name="option" class="form-control" placeholder= "Input overview here" wrap="hard"></textarea>
-              <small align="right" id="email tnc" class="form-text text-muted"><b>Please input &lt;br&gt; manually!!!</b></small>
-              
+              <div class="form-group">
+                  <b style="font-size:20px">YOUR FUNDING GOALS</b>
+                <input type="string" class="form-control" name="goal_funding" aria-describedby="emailHelp" placeholder="Enter Your Donation goals here">
+              </div>
+              <input type="hidden" name="total_funding" value="0">
               Product image URL : <input type="text" placeholder="http://imgur.com/xxxxx" name="image"><br>
               <small align="right" id="email tnc" class="form-text text-muted"><br></small>
               <p align ="right"><button type="submit" class="btn btn-primary">Submit</button></p>

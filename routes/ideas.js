@@ -18,20 +18,32 @@ router.get('/', login, (req, res) => {
 })
 
 router.get('/view/:id', login, (req, res) => {
-  models.Idea.findById(req.params.id, {include: [models.Perk]})
-  .then(data => 
-    res.render('ideasbyid.ejs', {idea: data, perks: data.Perks}))
+  models.Idea.findById(req.params.id, {include: [models.Perk, models.User]})
+  .then(data => {
+    models.User.findOne({where: {id: data.UserId}})
+    .then(dataUser=>{
+      res.render('ideasbyid.ejs', {idea: data, perks: data.Perks, user: dataUser, sess: req.session })
+    })
+  })
   .catch(err =>{
     res.send(err);})
 })
 
 
-router.get('/edit/:id', access, (req, res) => {
+
+router.get('/edit/:id',  (req, res) => {
   models.Idea.findById(req.params.id, {include: [models.Perk]})
-  .then(data => res.render('editidea.ejs', {idea: data, perks: data.Perks}))  
+  .then(data => {
+    if(data.UserId === req.session.userid){
+      res.render('editidea.ejs', {idea: data, perks: data.Perks})  
+    }
+    else {
+      res.send('NO ACCESS')
+    }
+  })
 })
 
-router.post('/edit/:id', access, (req, res) => {
+router.post('/edit/:id',(req, res) => {
   let newdata = {
     overview : req.body.overview,
     image : req.body.image,
@@ -40,7 +52,10 @@ router.post('/edit/:id', access, (req, res) => {
     goal_funding: req.body.goal_funding
   }
   models.Idea.update(newdata, {where: {id: req.params.id}})
-  .then(data => res.redirect('/ideas'))
+  .then(data => {
+    // res.send(newdata)
+    res.redirect('/ideas')      
+  })
 })
 
 router.get('/create', login, (req, res) => {
@@ -53,8 +68,10 @@ router.post('/create', login, (req, res) => {
     image : req.body.image,
     title : req.body.title,
     total_funding: req.body.total_funding,
-    goal_funding: req.body.goal_funding
+    goal_funding: req.body.goal_funding,
+    UserId: req.session.userid,
   }
+  // res.send(newidea)
   models.Idea.create(newidea).then(data => res.redirect('/ideas'))
 })
 
@@ -68,6 +85,7 @@ router.get('/delete/:id', login, (req, res) => {
 router.get('/perks/:id', login, (req, res)=>{
   models.Idea.findById(req.params.id, {include: [models.Perk]})
   .then(data=>{
+    // res.send(data)
     res.render('addperks.ejs', {idea: data, perks: data.Perk})
   })
 })
@@ -81,6 +99,7 @@ router.post('/perks/:id', login, (req, res)=>{
     }
     models.Perk.create(newdata)
     .then(data=>{
+      // res.send(req.session.logged);
       res.redirect('/ideas')
     })
     .catch(err=>{
@@ -91,9 +110,14 @@ router.post('/perks/:id', login, (req, res)=>{
 
 router.get('/perks/:id/edit', admin, (req, res)=>{
   // res.send(req.params.id)
-  models.Perk.findById(req.params.id)
+  models.Perk.findById(req.params.id, {include: [models.Idea]})
   .then(data=>{
-    res.render('editperks.ejs', {perk: data})  
+    if(data.Idea.UserId == req.session.userid){
+      res.render('editperks.ejs', {perk: data})  
+    }else{
+      res.redirect('/ideas')
+    }
+    
   })
   .catch(err=>{
     res.send(err);
@@ -118,10 +142,15 @@ router.post('/perks/:id/edit', admin, (req, res)=>{
   })
 })
 
-router.get('/perks/:id/delete', admin, (req, res)=>{
-  models.Perk.destroy({where: {id: req.params.id}})
+
+router.get('/perks/:id/delete', (req, res)=>{
+  models.Perk.destroy({where: {id: req.params.id}, include: [models.User]})
   .then(data=>{
-    res.send("data telah dihapus")
+    if(data.User.UserId == req.session.userid){
+      res.send("data telah dihapus")
+    }else{
+      res.send("no authorization")
+    }
   })
   .catch(err=>{
     res.send(err)
@@ -151,22 +180,26 @@ router.post('/view/:idIdea/:idPerk/approve', login, (req, res)=>{
   }
   models.UserIdea.create(obj)
   .then(datas=>{
-    var data = {
-      from: 'Lentera <lentera@mail.com>',
-      to: 'heraldoyusrontris@gmail.com',
-      subject: 'Hello',
-      text: 'Testing some Mailgun awesomeness!'
-    };
-     
-    mailgun.messages().send(data, function (error, body) {
-      if(!error){
-        console.log(data)
-        console.log(body)
-        console.log("success")
-      }else{
-        console.log("email not sent")
-      }
-    });
+    models.User.findOne({where: {id: req.session.userid}})
+    .then(dataUser=> {
+      // console.log(dataUser.email);
+      var data = {
+        from: 'Lentera <lentera@awtian.com>',
+        to: dataUser.email+'',
+        subject: 'Hello',
+        text: 'Testing some Mailgun awesomeness!'
+      };
+       
+      mailgun.messages().send(data, function (error, body) {
+        if(!error){
+          console.log(data)
+          console.log(body)
+          console.log("success")
+        }else{
+          console.log("email not sent")
+        }
+      });
+    })
   })
   .catch(err=>{
     res.send(err)
