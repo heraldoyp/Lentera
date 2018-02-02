@@ -5,13 +5,14 @@ module.exports = (sequelize, DataTypes) => {
     image: DataTypes.STRING,
     title: DataTypes.STRING,
     total_funding: DataTypes.INTEGER,
-    goal_funding: DataTypes.INTEGER
+    goal_funding: DataTypes.INTEGER,
+    UserId: DataTypes.INTEGER,
   });
 
   Idea.associate = function(models){
     Idea.hasMany(models.Perk)
     Idea.belongsToMany(models.User, {through:"UserIdea"})
-    // Idea.hasMany(models.UserIdea)
+    // Idea.belongsTo(models.Idea, {foreignKey: "UserId"})
   }
 
   Idea.prototype.progress = function() {

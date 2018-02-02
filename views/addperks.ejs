@@ -10,7 +10,7 @@
       <script type="text/javascript"> bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });</script>
 </head>
 <body>
-    <%- include('includes/navbar')%>
+    <%- include('includes/navbarlogged')%>
     <br><br>
     <h1 class="text-center">Input new <%=idea.title%> Perks</h1>
     <center>
@@ -23,7 +23,7 @@
                 <label for="exampleInputEmail1">Input Donation</label>
                 <input type="text" name="amount_donated" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Donation">
             </div>
-            <b>Overview: Please input &lt;li&gt; and &lt;/li&gt; manually</b> <br>
+            <br><br>
             <textarea rows="6" cols="100" name="items" placeholder= "Input overview here" wrap="hard"></textarea><br>
             <input type="submit" value="Submit">
         </form>

@@ -25,6 +25,7 @@ module.exports = {
       title: "Muzen OTR Wood",
       total_funding: 0,
       goal_funding: 5000000,
+      UserId: 1,
       createdAt: new Date(),
       updatedAt: new Date()
     }, 
@@ -40,6 +41,7 @@ module.exports = {
       title: "Duo By Simtek",
       total_funding: 0,
       goal_funding: 2000000,
+      UserId: 2,
       createdAt: new Date(),
       updatedAt: new Date()
     }], {});

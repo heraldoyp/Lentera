@@ -8,22 +8,18 @@
     <title>Document</title>
 </head>
 <body>
-    <%- include('includes/navbar') %>
+    <%- include('includes/navbarlogged') %>
     <div class="row">
             <%datas.reverse().forEach(idea => {%>
-        <div class="col-sm-1">
-        </div>
-        <div class="card mb-3 col-sm-3 col-sm-offset-2">
+        <div class="card mb-3 col-sm-4 col-sm-offset-2">
                 <a href="/ideas/view/<%=idea.id%>" class="card-link"><h3 class="card-header"><%=idea.title%></h3></a>
             <img style="height: 200px; width: 100%; display: block;" src="<%=idea.image%>" alt="Card image">
-            <div class="card-body">
-                    <a href="/ideas/view/<%=idea.id%>" class="card-link"><h5>Progress</h5></a>
-            </div>
+            <a href="/ideas/view/<%=idea.id%>" class="card-link"><h5>Progress</h5></a>
             <div class="progress">
                 <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" 
                 style="width:<%=idea.progress()%>%"></div>
             </div>
-            <h6>IDR <%=idea.koma(idea.total_funding)%> / IDR <%=idea.koma(idea.goal_funding)%></h6>
+            <h6>IDR <%=idea.total_funding%> / IDR <%=idea.goal_funding%></h6>
             <div class="card-body">
                 <h6 class="card-subtitle text-muted"><%-idea.overview%></h6>
             </div>

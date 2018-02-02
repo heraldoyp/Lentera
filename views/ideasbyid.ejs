@@ -4,21 +4,34 @@
     <link rel="stylesheet" href="https://bootswatch.com/4/sketchy/bootstrap.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
 <body>
-    <%- include('includes/navbar') %>
+    <%- include('includes/navbarlogged') %>
     <br>
+    <%if (user.id === sess.userid) {%> <center><a href="/ideas/edit/<%=idea.id%>">Edit or Add Perks</a></center>  <%}%>
     <div class="row">
+          
+    <!-- Your share button code -->
         <div class="col-sm-1"></div>
         <div class="col-sm-6">
             <div class="card mb-3">
-                <h3 class="card-header text-primary"><%var arr = idea.overview.split(' ')%> <%arr = arr.slice(0,6)%> <%=arr.join(' ')%></h3>
+                <h3 class="card-header text-primary"><%-idea.title%></h3>
                 <img class="img-center" style="height: 500px; width: 100%; display: block;" src="<%= idea.image %>" alt="Card image">
                 <div class="card-body">
-                  <h6 class="card-subtitle"><%idea.overview.split('<br>').forEach(x => {%><%=x%> <br> <%})%></h6>
+                  <h6 class="card-subtitle"><%-idea.overview%></h6>
+                  <div align="right" class="fb-share-button" data-href="http://lentera.com/ideas/view/<%=idea.id%>" data-layout="button" data-size="large" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fdomainkita.com%2Fideas%2Fview%2F<%=idea.id%>&amp;src=sdkpreparse">Bagikan di Facebook :D</a></div>
                 </div>
+                <h6 class="card-header text-primary">Created by <%=user.firstName%> <%=user.lastName%></h6>
             </div>
         </div>
         <div class="col-sm-1"></div>
