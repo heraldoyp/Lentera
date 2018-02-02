@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const models = require('../models');
 const progress = require('../helpers/progress.js')
-var api_key = 'key-7f663c7fad5ee49dd36fa41cd5714894';
-var domain = 'sandboxddff3e8a92d349d1bf5e32d78e253677.mailgun.org';
-var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
+const api_key = 'key-7f663c7fad5ee49dd36fa41cd5714894';
+const domain = 'sandboxddff3e8a92d349d1bf5e32d78e253677.mailgun.org';
+const mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
 const admin = require('../helpers/adminaccess.js')
 const login = require('../helpers/haruslogin.js')
 const access = require('../helpers/access.js')
@@ -28,6 +28,7 @@ router.get('/view/:id', login, (req, res) => {
   .catch(err =>{
     res.send(err);})
 })
+
 
 
 router.get('/edit/:id',  (req, res) => {
@@ -107,7 +108,7 @@ router.post('/perks/:id', login, (req, res)=>{
 })
 
 
-router.get('/perks/:id/edit', (req, res)=>{
+router.get('/perks/:id/edit', admin, (req, res)=>{
   // res.send(req.params.id)
   models.Perk.findById(req.params.id, {include: [models.Idea]})
   .then(data=>{
@@ -124,7 +125,7 @@ router.get('/perks/:id/edit', (req, res)=>{
   
 })
 
-router.post('/perks/:id/edit', (req, res)=>{
+router.post('/perks/:id/edit', admin, (req, res)=>{
   let changedData = {
     title: req.body.title,
     amount_donated: req.body.amount_donated,
@@ -140,6 +141,7 @@ router.post('/perks/:id/edit', (req, res)=>{
     res.send(err)
   })
 })
+
 
 router.get('/perks/:id/delete', (req, res)=>{
   models.Perk.destroy({where: {id: req.params.id}, include: [models.User]})
