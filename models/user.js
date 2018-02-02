@@ -70,6 +70,7 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function(models){
     // User.hasMany(models.UserIdea)
     User.belongsToMany(models.Idea, {through:"UserIdea"})
+    // User.hasMany(models.Idea)
   }
 
   User.beforeCreate((user, options) => {

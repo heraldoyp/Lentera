@@ -71,6 +71,7 @@ router.get('/edit/:id', (req,res) => {
 router.post('/edit/:id', (req,res) => {
 
   if (req.session.username === "admin" || req.session.userid === req.params.id) {
+
   let newdata = {
     firstName : req.body.firstName,
     lastName : req.body.lastName,
@@ -80,7 +81,6 @@ router.post('/edit/:id', (req,res) => {
     .then(output => res.redirect('/user/list'))
   } else {
     res.send('Page ini hanya bisa diakses oleh admin! / user!')
-
   }
 })
 
@@ -104,23 +104,21 @@ router.get('/login', (req, res)=>{
   } else {
     res.render('login')
   }
-
 })
 
 router.post('/login', passcheck, (req, res)=>{
 
-  if (req.body.login) {
+  if (req.body.login === true) {
 
     req.session.username = req.body.username;
     req.session.userid = req.body.id;
     req.session.logged = true;
 
-    res.send(`login ${req.session.username} <br> user id:${req.session.userid} berhasil`)
-  
+    res.redirect('/ideas')
+    // res.send(`login ${req.session.username} <br> user id:${req.session.userid} berhasil`)
   } else {
     res.send("login gagal")
   }
-
 })
 
 router.get('/logout', (req,res) => {
@@ -129,7 +127,7 @@ router.get('/logout', (req,res) => {
   req.session.userid = null;
   req.session.logged = false;
   
-  res.send('you are logged out!')
+  res.redirect('/ideas')
 
 })
 
@@ -140,6 +138,5 @@ router.get('/sess', (req,res) => {
   let id = req.session.userid;
   res.send(id + username)
 })
-
 
 module.exports = router;
